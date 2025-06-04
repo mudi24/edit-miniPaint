@@ -24,6 +24,14 @@ import File_open_class from './modules/file/open.js';
 import File_save_class from './modules/file/save.js';
 import * as Actions from './actions/index.js';
 
+// 在window.addEventListener('load', function (e) {...})函数内添加以下代码
+const quickUploadButton = document.getElementById('quick_upload_button');
+if (quickUploadButton) {
+    quickUploadButton.addEventListener('click', function() {
+        // 直接调用已有的打开文件方法
+        FileOpen.open_file();
+    });
+}
 window.addEventListener('load', function (e) {
 	// Initiate app
 	var Layers = new Base_layers_class();
@@ -54,4 +62,19 @@ window.addEventListener('load', function (e) {
 	// Render all
 	GUI.init();
 	Layers.init();
+  // addImageOnInit(Layers) 
 }, false);
+async function addImageOnInit(Layers, imageData) {
+  // 创建一个新的图片图层
+  var params = {
+      type: 'image',
+      data: imageData || './image.png',  // 使用传入的图片数据或默认图片
+      x: 0,
+      y: 0,
+      width: 270,             // 可选
+      height: 129             // 可选
+  };
+  await Layers.insert(params);
+}
+// 在window.addEventListener('load', function (e) {...})函数后添加
+window.addImageOnInit = addImageOnInit;

@@ -318,11 +318,18 @@ class File_open_class {
 						order: order,
 						_exif: _this.extract_exif(this.file)
 					};
+					
+					// 调用addImageOnInit方法并传入图片数据
+					if (typeof addImageOnInit === 'function') {
+						addImageOnInit(app.Layers, event.target.result);
+					} else {
+					// 如果找不到addImageOnInit方法，使用原来的方式插入图层
 					app.State.do_action(
 						new app.Actions.Bundle_action('open_image', 'Open Image', [
-							new app.Actions.Insert_layer_action(new_layer)
+						new app.Actions.Insert_layer_action(new_layer)
 						])
 					);
+					}
 				}
 				else {
 					//json
@@ -376,11 +383,18 @@ class File_open_class {
 							data: event.target.result,
 							_exif: _this.extract_exif(this.file)
 						};
+						
+						// 调用addImageOnInit方法并传入图片数据
+						if (typeof addImageOnInit === 'function') {
+						addImageOnInit(app.Layers, event.target.result);
+						} else {
+						// 如果找不到addImageOnInit方法，使用原来的方式插入图层
 						app.State.do_action(
-							new app.Actions.Bundle_action('open_image', 'Open Image', [
-								new app.Actions.Insert_layer_action(new_layer)
-							])
+						new app.Actions.Bundle_action('open_image', 'Open Image', [
+						new app.Actions.Insert_layer_action(new_layer)
+						])
 						);
+						}
 					}
 				};
 
