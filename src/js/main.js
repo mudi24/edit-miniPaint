@@ -24,14 +24,6 @@ import File_open_class from './modules/file/open.js';
 import File_save_class from './modules/file/save.js';
 import * as Actions from './actions/index.js';
 
-// 在window.addEventListener('load', function (e) {...})函数内添加以下代码
-const quickUploadButton = document.getElementById('quick_upload_button');
-if (quickUploadButton) {
-    quickUploadButton.addEventListener('click', function() {
-        // 直接调用已有的打开文件方法
-        FileOpen.open_file();
-    });
-}
 window.addEventListener('load', function (e) {
 	// Initiate app
 	var Layers = new Base_layers_class();
@@ -62,19 +54,42 @@ window.addEventListener('load', function (e) {
 	// Render all
 	GUI.init();
 	Layers.init();
-  // addImageOnInit(Layers) 
+	setTimeout(() => {
+		addImageOnInit(Layers)
+	}, 300);
+	// 在这里调用addImageOnInit函数
 }, false);
-async function addImageOnInit(Layers, imageData) {
-  // 创建一个新的图片图层
-  var params = {
-      type: 'image',
-      data: imageData || './image.png',  // 使用传入的图片数据或默认图片
-      x: 0,
-      y: 0,
-      width: 270,             // 可选
-      height: 129             // 可选
-  };
-  await Layers.insert(params);
+function addImageOnInit(Layers, imageData) {
+	try {
+		window.addEventListener('message', async (event) => {
+			console.log('FileOPen', window.FileOpen);
+
+			// 检查消息来源以提高安全性
+			if (event.origin !== 'http://192.168.0.105:8080/') return;
+
+			if (event.data && event.data.type === 'imageData') {
+				const imageData = event.data.data;
+				console.log('Received image data in iframe:', imageData);
+				// 在这里处理接收到的图片数据，例如显示在 <img> 标签中
+				// 创建一个新的图片图层
+				var params = {
+					type: 'image',
+					data: imageData || './src/js/image.png',  // 修改为正确的路径
+					x: 0,
+					y: 0,
+					width: 270,             // 可选
+					height: 129             // 可选
+				};
+				await Layers.insert(params);
+				// await window.Layers.insert(params);
+				console.log('图片已成功添加到画布');
+			}
+		});
+
+	} catch (error) {
+		console.error('添加图片失败:', error);
+		// 可以在这里添加备用方案
+	}
 }
 // 在window.addEventListener('load', function (e) {...})函数后添加
 window.addImageOnInit = addImageOnInit;

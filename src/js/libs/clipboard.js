@@ -49,28 +49,34 @@ class Clipboard_class {
 		this.pasteCatcher.style.width = "10px";
 		document.body.appendChild(this.pasteCatcher);
 
-		// create an observer instance
-		var observer = new MutationObserver(function (mutations) {
-			mutations.forEach(function (mutation) {
-				if (this.paste_mode == 'auto' || this.ctrl_pressed == false || mutation.type != 'childList')
-					return true;
+		try {
+			// create an observer instance
+			var observer = new MutationObserver(function (mutations) {
+				mutations.forEach(function (mutation) {
+					if (this.paste_mode == 'auto' || this.ctrl_pressed == false || mutation.type != 'childList')
+						return true;
 
-				//if paste handle failed - capture pasted object manually
-				if (mutation.addedNodes.length == 1) {
-					if (mutation.addedNodes[0].src != undefined) {
-						//image
-						_self.paste_createImage(mutation.addedNodes[0].src);
+					//if paste handle failed - capture pasted object manually
+					if (mutation.addedNodes.length == 1) {
+						if (mutation.addedNodes[0].src != undefined) {
+							//image
+							_self.paste_createImage(mutation.addedNodes[0].src);
+						}
+						//register cleanup after some time.
+						setTimeout(function () {
+							this.pasteCatcher.innerHTML = '';
+						}, 20);
 					}
-					//register cleanup after some time.
-					setTimeout(function () {
-						this.pasteCatcher.innerHTML = '';
-					}, 20);
-				}
+				});
 			});
-		});
-		var target = document.getElementById('paste_ff');
-		var config = {attributes: true, childList: true, characterData: true};
-		observer.observe(target, config);
+			var target = document.getElementById('paste_ff');
+			var config = { attributes: true, childList: true, characterData: true };
+			observer.observe(target, config);
+		} catch (error) {
+			console.log('errr', error);
+
+		}
+
 	}
 
 	//default paste action
