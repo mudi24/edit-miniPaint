@@ -53,9 +53,8 @@ class Clipboard_class {
 			// create an observer instance
 			var observer = new MutationObserver(function (mutations) {
 				mutations.forEach(function (mutation) {
-					if (this.paste_mode == 'auto' || this.ctrl_pressed == false || mutation.type != 'childList')
+					if (_self.paste_mode == 'auto' || _self.ctrl_pressed == false || mutation.type != 'childList')
 						return true;
-
 					//if paste handle failed - capture pasted object manually
 					if (mutation.addedNodes.length == 1) {
 						if (mutation.addedNodes[0].src != undefined) {
@@ -64,7 +63,7 @@ class Clipboard_class {
 						}
 						//register cleanup after some time.
 						setTimeout(function () {
-							this.pasteCatcher.innerHTML = '';
+							_self.pasteCatcher.innerHTML = '';
 						}, 20);
 					}
 				});

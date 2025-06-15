@@ -62,10 +62,10 @@ window.addEventListener('load', function (e) {
 function addImageOnInit(Layers, imageData) {
 	try {
 		window.addEventListener('message', async (event) => {
-			console.log('FileOPen', window.FileOpen);
+      console.log('event', event);
 
 			// 检查消息来源以提高安全性
-			if (event.origin !== 'http://192.168.0.105:8080/') return;
+			// if (event.origin !== 'http://192.168.0.105:8080/') return;
 
 			if (event.data && event.data.type === 'imageData') {
 				const imageData = event.data.data;
