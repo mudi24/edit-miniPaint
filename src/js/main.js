@@ -61,15 +61,18 @@ window.addEventListener('load', function (e) {
 }, false);
 function addImageOnInit(Layers, imageData) {
 	console.log('addImageOnInit');
-	
+
 	try {
 		window.addEventListener('message', async (event) => {
-      console.log('event', event.data);
+			console.log('event', event.data);
 
 			// 检查消息来源以提高安全性
 			// if (event.origin !== 'http://192.168.0.105:8080/') return;
+			if (event.data && event.data.type === 'saveImage') {
+				console.log('save save');
 
-			if (event.data) {
+			}
+			if (event.data && event.data.type === 'imageData') {
 				const imageData = event.data.data;
 				console.log('Received image data in iframe:', imageData);
 				// 在这里处理接收到的图片数据，例如显示在 <img> 标签中
