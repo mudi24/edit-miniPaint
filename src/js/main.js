@@ -70,7 +70,22 @@ function addImageOnInit(Layers, imageData) {
 			// if (event.origin !== 'http://192.168.0.105:8080/') return;
 			if (event.data && event.data.type === 'saveImage') {
 				console.log('save save');
+				// const canvas = Base_layers_class.convert_layers_to_canvas()
+				var canvas = document.createElement('canvas');
+				var ctx = canvas.getContext('2d');
+				canvas.width = config.WIDTH;
+				canvas.height = config.HEIGHT;
+				app.Layers.convert_layers_to_canvas(ctx);
+				// 转换为数据URL
+				var dataURL = canvas.toDataURL('image/png');
 
+				// 或转换为Blob
+				canvas.toBlob(function (blob) {
+					// 使用blob，例如保存文件
+					filesaver.saveAs(blob, 'image.png');
+				});
+				var jsonData = app.FileSave.export_as_json();
+				window.postMessage({ type: 'imageData', editData: dataURL }, '*');
 			}
 			if (event.data && event.data.type === 'imageData') {
 				const imageData = event.data.data;
