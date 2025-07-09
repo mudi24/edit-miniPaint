@@ -64,7 +64,7 @@ function addImageOnInit(Layers, imageData) {
 
 	try {
 		window.addEventListener('message', async (event) => {
-			console.log('event', event.data);
+			console.log('minipaint event', event.data);
 
 			// 检查消息来源以提高安全性
 			// if (event.origin !== 'http://192.168.0.105:8080/') return;
@@ -79,17 +79,11 @@ function addImageOnInit(Layers, imageData) {
 				// 转换为数据URL
 				var dataURL = canvas.toDataURL('image/png');
 
-				// 或转换为Blob
-				canvas.toBlob(function (blob) {
-					// 使用blob，例如保存文件
-					filesaver.saveAs(blob, 'image.png');
-				});
-				var jsonData = app.FileSave.export_as_json();
 				window.postMessage({ type: 'imageData', editData: dataURL }, '*');
 			}
 			if (event.data && event.data.type === 'imageData') {
 				const imageData = event.data.data;
-				console.log('Received image data in iframe:', imageData);
+				console.log('mini Received image data in iframe:', imageData);
 				// 在这里处理接收到的图片数据，例如显示在 <img> 标签中
 				// 创建一个新的图片图层
 				var params = {
