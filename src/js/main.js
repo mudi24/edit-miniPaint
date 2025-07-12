@@ -64,10 +64,11 @@ function addImageOnInit(Layers, imageData) {
 
 	try {
 		window.addEventListener('message', async (event) => {
-			console.log('minipaint event', event.data);
+			console.log('minipaint event', event);
 
 			// 检查消息来源以提高安全性
-			// if (event.origin !== 'http://192.168.0.105:8080/') return;
+			if (event.origin !== 'http://10.34.44.203:8081') return;
+			// if (event.origin !== 'http://192.168.0.105:8080') return;
 			if (event.data && event.data.type === 'saveImage') {
 				console.log('save save');
 				// const canvas = Base_layers_class.convert_layers_to_canvas()
@@ -78,8 +79,8 @@ function addImageOnInit(Layers, imageData) {
 				app.Layers.convert_layers_to_canvas(ctx);
 				// 转换为数据URL
 				var dataURL = canvas.toDataURL('image/png');
-
-				window.postMessage({ type: 'imageData', editData: dataURL }, '*');
+				
+				window.parent.postMessage({ type: 'saveImageData', editData: dataURL }, 'http://10.34.44.203:8081');
 			}
 			if (event.data && event.data.type === 'imageData') {
 				const imageData = event.data.data;
@@ -91,8 +92,6 @@ function addImageOnInit(Layers, imageData) {
 					data: imageData || './src/js/image.png',  // 修改为正确的路径
 					x: 0,
 					y: 0,
-					width: 270,             // 可选
-					height: 129             // 可选
 				};
 				await Layers.insert(params);
 				// await window.Layers.insert(params);
